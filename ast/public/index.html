@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/template" id="template">
+        <!-- 注释节点1 -->
+        开头文本节点
+        <span>span标签的文本</span>
+        <ul>
+            <!-- 注释节点2 -->
+            ul标签的第一个文本本节点
+            <div>ul标签里面的的div标签</div>
+            ul标签的第二个文本本节点
+            <li v-for="i in 10" :Key="i" attr1>
+                <ol>
+                    <li v-for="j in 5" :key="j" attr2>\
+                        最内层li标签的文本
+                    </li>
+                </ol>
+            </li>
+        </ul>
+    </script>
+</head>
+<body>
+    简单地将 template 模板 解析成 ast 对象
+    <script src="/xuni/bundle.js"></script>
+</body>
+</html>
