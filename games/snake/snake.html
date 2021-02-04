@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="snake"></canvas>
+    <script>
+        /** 默认配置 */
+        var config = {
+            SIZE: 30,
+            ROW: 20,
+            COL: 20,
+            GAP: 5,
+            SNAKE: [[0, 0], [1, 0], [2, 0]],
+            DIR: 'ArrowDown' // 初始移动方向
+        };
+        /** 贪吃蛇 */
+        var Game = /** @class */ (function () {
+            function Game(config) {
+                Object.assign(this, config);
+            }
+            /**
+             * 启动游戏
+             */
+            Game.prototype.start = function () {
+                this.init();
+                this.registEvent();
+                this.scheduler = function (fn) { return setTimeout(fn, 600); };
+                this.timer = this.scheduler(this.startRender.bind(this));
+            };
+            /**
+             * 启动动画渲染
+             */
+            Game.prototype.startRender = function () {
+                if (this.isOver) {
+                    return;
+                }
+                this.render(this.DIR);
+                this.timer = this.scheduler(this.startRender.bind(this));
+            };
+            /**
+             * 动画渲染（清除画布，边界判断，🐍前进，渲染食物，吃食物，渲染食物，渲染🐍）
+             * @param {*} dir 移动方向
+             */
+            Game.prototype.render = function (dir) {
+                // 按键与当前移动方向相反则返回
+                if (this.DIR === 'ArrowUp' && dir === 'ArrowDown') {
+                    return;
+                }
+                if (this.DIR === 'ArrowDown' && dir === 'ArrowUp') {
+                    return;
+                }
+                if (this.DIR === 'ArrowLeft' && dir === 'ArrowRight') {
+                    return;
+                }
+                if (this.DIR === 'ArrowRight' && dir === 'ArrowLeft') {
+                    return;
+                }
+                // 🐍头
+                var head = this.SNAKE[0];
+                if (!this.checkBoundary(dir, head)) {
+                    this.over();
+                    return;
+                }
+                // 新建一个🐍头
+                var newHead = [head[0], head[1]];
+                var last = this.SNAKE[this.SNAKE.length - 1];
+                var preLast = [last[0], last[1]];
+                if (this.DIR !== dir) {
+                    this.DIR = dir;
+                }
+                // 新🐍头根据方向移动
+                switch (dir) {
+                    case 'ArrowUp':
+                        --newHead[1];
+                        break;
+                    case 'ArrowDown':
+                        ++newHead[1];
+                        break;
+                    case 'ArrowLeft':
+                        --newHead[0];
+                        break;
+                    case 'ArrowRight':
+                        ++newHead[0];
+                        break;
+                    default: return;
+                }
+                // 清空画布
+                this.clearCanvas();
+                // 渲染食物
+                this.renderFoot();
+                // 🐍身前进
+                for (var i = this.SNAKE.length - 1; i > 0; i--) {
+                    this.SNAKE[i] = this.SNAKE[i - 1];
+                }
+                // 重设🐍头
+                this.SNAKE[0] = newHead;
+                // 吃到一个食物，🐍身后退，食物变🐍头
+                this.eatFood(preLast);
+                // 渲染🐍
+                this.renderSnake();
+            };
+            /**
+             * 清除画布
+             */
+            Game.prototype.clearCanvas = function () {
+                this.ctx.clearRect(0, 0, this.WIDTH, this.HEIHGT);
+            };
+            /**
+             * 吃食物，将食物推入🐍，变为🐍头
+             * @param {*} preLast 移动之前的🐍的尾巴
+             */
+            Game.prototype.eatFood = function (preLast) {
+                // 没有食物返回
+                if (!this.food) {
+                    return;
+                }
+                var _a = this.food, fx = _a[0], fy = _a[1];
+                var _b = this.SNAKE[0], sx = _b[0], sy = _b[1];
+                if (sx !== fx || sy !== fy) {
+                    return;
+                }
+                var len = this.SNAKE.length;
+                for (var i = 0; i < len - 1; i++) {
+                    this.SNAKE[i] = this.SNAKE[i + 1];
+                }
+                this.SNAKE[len - 1] = preLast;
+                this.SNAKE.unshift([fx, fy]);
+                // 清除食物
+                var _c = this.getRenderPoint(this.food), cx = _c[0], cy = _c[1];
+                this.food = null;
+                this.ctx.clearRect(cx, cy, this.SIZE, this.SIZE);
+                // 新生成并渲染一个食物
+                this.renderFoot();
+                this.score = (this.score || 0) + 10;
+                console.clear();
+                console.log('分数：', this.score);
+            };
+            /**
+             * 获取真正的渲染坐标（包含方块之间的间隙）
+             * @param {*} item 坐标
+             */
+            Game.prototype.getRenderPoint = function (item) {
+                var x = item[0], y = item[1];
+                return [x * this.SIZE + (x + 1) * this.GAP, y * this.SIZE + (y + 1) * this.GAP];
+            };
+            /**
+             * 注册事件
+             */
+            Game.prototype.registEvent = function () {
+                var _this = this;
+                this.event = function (e) { return _this.render(e.key); };
+                window.addEventListener('keydown', this.event);
+            };
+            /**
+             * 结束游戏
+             */
+            Game.prototype.over = function () {
+                window.removeEventListener('keydown', this.event);
+                this.isOver = true;
+                clearTimeout(this.timer);
+                alert('游戏结束，分数：' + (this.score || 0));
+            };
+            /**
+             * 渲染食物
+             */
+            Game.prototype.renderFoot = function () {
+                if (!this.food) {
+                    this.createFood();
+                }
+                var _a = this.getRenderPoint(this.food), x = _a[0], y = _a[1];
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillRect(x, y, this.SIZE, this.SIZE);
+            };
+            /**
+             * 生成食物（不能和🐍身重合）
+             */
+            Game.prototype.createFood = function () {
+                var x = ~~(Math.random() * this.COL);
+                var y = ~~(Math.random() * this.ROW);
+                var cross = this.SNAKE.some(function (item) {
+                    return x === item[0] && y === item[1];
+                });
+                if (cross) {
+                    this.createFood();
+                }
+                return this.food = [x, y];
+            };
+            /**
+             * 检查🐍是否越界（这里没有判断🐍头和🐍身重合）
+             * @param {*} dir 🐍的移动方向
+             * @param {*} head 🐍头
+             */
+            Game.prototype.checkBoundary = function (dir, head) {
+                var x = head[0], y = head[1];
+                switch (dir) {
+                    case 'ArrowUp': return y > 0;
+                    case 'ArrowLeft': return x > 0;
+                    case 'ArrowDown': return y < this.ROW - 1;
+                    case 'ArrowRight': return x < this.COL - 1;
+                    default: break;
+                }
+                return true;
+            };
+            /**
+             * 渲染🐍
+             */
+            Game.prototype.renderSnake = function () {
+                for (var i = 0, len = this.SNAKE.length; i < len; i++) {
+                    var cur = this.SNAKE[i];
+                    var x1 = cur[0], y1 = cur[1];
+                    var _a = this.getRenderPoint(cur), sx = _a[0], sy = _a[1];
+                    this.ctx.fillStyle = i === 0 ? 'orange' : 'white';
+                    this.ctx.fillRect(sx, sy, this.SIZE, this.SIZE);
+                    // 填充或清除间隙
+                    if (i >= len - 1) {
+                        continue;
+                    }
+                    var nex = this.SNAKE[i + 1];
+                    var x2 = nex[0], y2 = nex[1];
+                    var gx = void 0, gy = void 0, w = void 0, h = void 0;
+                    if (y1 === y2) {
+                        gx = x2 > x1 ? sx + this.SIZE : sx - this.GAP;
+                        gy = sy;
+                        w = this.GAP;
+                        h = this.SIZE;
+                    }
+                    else if (x1 === x2) {
+                        gx = sx;
+                        gy = y2 > y1 ? sy + this.SIZE : sy - this.GAP;
+                        w = this.SIZE;
+                        h = this.GAP;
+                    }
+                    this.ctx.fillRect(gx, gy, w, h);
+                }
+            };
+            /**
+             * 初始化参数
+             */
+            Game.prototype.init = function () {
+                var canvas = document.getElementById('snake');
+                this.ctx = canvas.getContext('2d');
+                // 设置画布宽高
+                var w = this.SIZE * this.COL + this.GAP * (this.COL + 1);
+                var h = this.SIZE * this.ROW + this.GAP * (this.ROW + 1);
+                canvas.style.backgroundColor = '#000';
+                this.WIDTH = canvas.width = w;
+                this.HEIHGT = canvas.height = h;
+                this.food = null;
+            };
+            return Game;
+        }());
+        new Game(config).start();
+    </script>
+</body>
+
+</html>

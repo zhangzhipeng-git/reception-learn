@@ -24,7 +24,6 @@ const singleTag = new RegExp('^<(' + singleTagName.join('|') + ')([\\s\\S]*?)>')
 const isBlank = /^\s*$/;
 
 export default function parseToAst(template) {
-    var scanner = new Scanner();
     var ast = Scanner.scan(template);
     return ast;
 }

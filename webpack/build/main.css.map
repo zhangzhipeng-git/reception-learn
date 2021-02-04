@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/a.css","webpack:///./src/index.css"],"names":[],"mappings":";AAAA;AACA;AACA,C;ACFA;AACA;AACA;AACA;AACA,C","file":"main.css","sourcesContent":["body {\r\n    background-color: yellow;;\r\n}","body {\r\n    background-color: red;\r\n    -webkit-transform: rotate(88deg);\r\n            transform: rotate(88deg);\r\n}"],"sourceRoot":""}
