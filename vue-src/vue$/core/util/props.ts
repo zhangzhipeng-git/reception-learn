@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { warn } from './debug'
 import { observe, toggleObserving, shouldObserve } from '../observer/index'
 import {
@@ -12,17 +11,18 @@ import {
 import { Component } from '../../types/options';
 /** props 选项 */
 type PropOptions = {
-  type: Function | Array<Function> | null,
+  type: Function | Array<Function> | null | boolean,
   default: any,
   required?: boolean,
   validator?: Function
 };
+declare var __WEEX__
 /**
- * 校验 prop
+ * 校验 prop ，并返回 key 对应的值 value
  * @param key 输入的属性名
  * @param propOptions props 选项，包含输入属性键值 
  * @param propsData 
- * @param vm Vue 实例
+ * @param vm 组件实例
  */
 export function validateProp (
   key: string,
@@ -34,12 +34,12 @@ export function validateProp (
   const prop = propOptions[key]
   // 不存在 prop 键的值
   const absent = !hasOwn(propsData, key)
-  // prop 键对应的值
+  // prop 键对应的值  
   let value = propsData[key]
   // boolean casting
   // 检查 prop 键对应的选项的类型是否包含布尔类型
   const booleanIndex = getTypeIndex(Boolean, prop.type)
-  // 如果类型中包含了布尔值，
+  // 如果类型中包含了布尔值
   if (booleanIndex > -1) {
       // 但是没给初始值和默认值，则将 prop 值赋值为 false
     if (absent && !hasOwn(prop, 'default')) {
@@ -85,7 +85,7 @@ export function validateProp (
  */
 /**
  * 获取 prop 键对应的默认值
- * @param vm Vue 实例
+ * @param vm 组件实例
  * @param prop prop 的选项
  * @param key prop 的键
  */
@@ -109,10 +109,14 @@ function getPropDefaultValue (vm: Component, prop: PropOptions, key: string): an
   // the raw prop value was also undefined from previous render,
   // return previous default value to avoid unnecessary watcher trigger
   // 如果 prop 已经被观察过了，直接返回之前的 prop 值
+  // @ts-ignore
   if (vm && vm.$options.propsData &&
+    // @ts-ignore
     vm.$options.propsData[key] === undefined &&
+    // @ts-ignore
     vm._props[key] !== undefined
   ) {
+    // @ts-ignore
     return vm._props[key]
   }
   // call factory function for non-Function types
@@ -131,7 +135,7 @@ function getPropDefaultValue (vm: Component, prop: PropOptions, key: string): an
  * @param prop prop 选项
  * @param name prop 键名
  * @param value prop 键值
- * @param vm Vue 实例
+ * @param vm 组件实例
  * @param absent 不存在
  */
 function assertProp (
@@ -152,7 +156,7 @@ function assertProp (
   if (value == null && !prop.required) {
     return
   }
-  let type = prop.type
+  let type: any = prop.type
   // type 为'',false,0,true,undefined 时为有效
   let valid = !type || type === true
   const expectedTypes = []

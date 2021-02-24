@@ -29,7 +29,7 @@ export function def(obj: object, key: string, val: any, enumerable?: boolean) {
         value: val,
         enumerable: !!enumerable, // 可枚举
         writable: true, // 可写
-        configurable: true // 可删除
+        configurable: true // 可删除，可修改除 writable 外的属性
     });
 }
 

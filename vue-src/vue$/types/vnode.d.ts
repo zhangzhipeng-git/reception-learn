@@ -63,7 +63,7 @@ export interface VNodeComponentOptions {
 export interface VNodeData {
   /** v-for 的 key，节点的唯一 key */
   key?: string | number;
-  /** slot 名称（待定） */
+  /** slot 名称 */
   slot?: string;
   /** 范围插槽 */
   scopedSlots?: { [key: string]: ScopedSlot | undefined };

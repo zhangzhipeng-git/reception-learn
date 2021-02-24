@@ -57,7 +57,7 @@ if (process.env.NODE_ENV !== 'production') {
         }
         // 如果是函数且有id，则取它的 options，
         // 如果不是函数或没有 id，判断是否有 _isVue 属性，
-        // 如果有，则说明是 Vue 实例，取它的 options 或构造器的 options ，
+        // 如果有，则说明是 组件实例，取它的 options 或构造器的 options ，
         // 如果没有则取它自己。
         const options = typeof vm === 'function' && vm.cid != null
             ? vm.options

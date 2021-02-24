@@ -6,7 +6,7 @@ import { pushTarget, popTarget } from '../observer/dep'
 /**
  * 内置错误处理函数
  * @param err 错误对象
- * @param vm Vue 实例
+ * @param vm 组件实例
  * @param info 信息（字符串）
  */
 export function handleError (err: Error, vm: any, info: string) {
@@ -45,7 +45,7 @@ export function handleError (err: Error, vm: any, info: string) {
  * @param handler 函数
  * @param context 上下文
  * @param args 参数
- * @param vm Vue 实例或其他
+ * @param vm 组件实例或其他
  * @param info 信息
  */
 export function invokeWithErrorHandling (
@@ -72,7 +72,7 @@ export function invokeWithErrorHandling (
 /**
  * 全局错误处理器
  * @param err 错误对象
- * @param vm Vue 实例
+ * @param vm 组件实例
  * @param info 信息
  */
 function globalHandleError (err, vm, info) {
@@ -94,7 +94,7 @@ function globalHandleError (err, vm, info) {
 /**
  * 打印错误信息或抛出错误
  * @param err 错误对象
- * @param vm Vue 实例
+ * @param vm 组件实例
  * @param info 信息 
  */
 function logError (err, vm, info) {

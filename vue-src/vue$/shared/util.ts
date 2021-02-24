@@ -187,7 +187,7 @@ export const camelize: (str: string) => string = cached((str: string): string =>
     return str.replace(camelizeRE, (_, c: string) => c ? c.toUpperCase() : '');
 });
 
-/**
+/** 
  * 返回一个函数，字符串首字母大写
  */
 export const capitalize = cached((str: string) => {
@@ -195,7 +195,7 @@ export const capitalize = cached((str: string) => {
 });
 
 const hyphenateRE = /\B([A-Z])/g;
-/**
+/** 
  * 返回一个函数，将驼峰式字符串转为以'-'连接的字符串
  */
 export const hyphenate = cached((str: string) => {
@@ -348,9 +348,9 @@ export function looseIndexOf(arr: Array<any>, v: any): number {
  * 返回一个函数，这个函数即使多次调用，也只会执行一次fn
  * @param fn 目标函数
  */
-export function once(fn: () => void): () => void {
+export function once(fn: (a) => void): (...args) => void {
     let called = false; // 每个返回的函数都会闭包一个called
-    return function() {
+    return function(...args) {
         if (!called) {
             called = true;
             fn.apply(this, arguments);

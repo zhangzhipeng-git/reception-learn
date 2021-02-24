@@ -4,9 +4,9 @@ export const hasProto = '__proto__' in {}
 declare const WXEnvironment;
 /** 判断是否在浏览器中 */
 export const inBrowser = typeof window !== 'undefined'
-/** 判断是否在微信环境 */
+/** 判断是否在 Weex 环境 */
 export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
-/** weex平台名称小写 */
+/** Weex 平台名称小写 */
 export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
 /** 浏览器的用户代理 */
 export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
@@ -47,8 +47,8 @@ if (inBrowser) {
 
 // this needs to be lazy-evaled because vue may be required before
 // vue-server-renderer can set VUE_ENV
-/** 判断是否服务端 */
 let _isServer
+/** 判断是否服务端 */
 export const isServerRendering = () => {
   if (_isServer === undefined) {
     /* istanbul ignore if */

@@ -9,7 +9,7 @@ import { Component } from '../types/options';
 
 export type Config = {
     /** 选项合并策略 */
-    optionMergeStrategies: {[key: string]: () => void};
+    optionMergeStrategies: {[key: string]: (...args) => any};
     /** 是否不提示 */
     silent: boolean;
     /** 生产提示 */

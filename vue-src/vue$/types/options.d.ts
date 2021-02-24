@@ -9,12 +9,12 @@ type Constructor = {
 /**
  * 无法推断异步组件的 prop 属性
  * 
- * 注意：ComponentOptions<V> 的泛型 V 是确定不变的，但是 V 中data，methods等的是确定的，而其他的可以使用最底层的类型 never 来收敛
+ * 注意：ComponentOptions<V> 的泛型 V 是确定不变的，但是 V 中data，methods等的是确定的，但是他们的泛型不确定，可以使用最底层的类型 never 来收敛
  */
 // we don't support infer props in async component
 // N.B. ComponentOptions<V> is contravariant, the default generic should be bottom type
 export type Component<Data=DefaultData<never>, Methods=DefaultMethods<never>, Computed=DefaultComputed, Props=DefaultProps> =
-  | typeof Vue
+   typeof Vue
   | FunctionalComponentOptions<Props>
   | ComponentOptions<never, Data, Methods, Computed, Props>
 
