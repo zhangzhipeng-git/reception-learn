@@ -1,3 +1,5 @@
+// ./main.js
+
 /**
  * webpack 不支持 require.config，
  * 这部分代码编译后为 undefined
@@ -10,7 +12,7 @@
  */
 require.config({
     paths: {
-        index: './start/index'
+        test: './test'
     }
 });
 
@@ -18,10 +20,10 @@ require.config({
  * 这种方式 webpack 可以识别，不过文件需存在
  * 
  * 第1种方式：根据 JS 文件路径去加载JS，
- * 等 index 对应的 JS 加载并执行完后就执行 callback
+ * 等 test 对应的 JS 加载并执行完后就执行 callback
  */
-require(['./start/index'], function(index) {
-    console.log('index2', index);
+require(['./test'], function(test) {
+    console.log('test2', test);
 });
 
 /**
@@ -35,24 +37,17 @@ require(['./start/index'], function(index) {
 
 /**
  * 第2种方式：根据 id 去加载JS，
- * 等 index 对应的 JS 加载并执行完后就执行 callback
+ * 等 test 对应的 JS 加载并执行完后就执行 callback
  */
-require(['index'],function(index){
-    console.log('index1', index);
+require(['test'],function(test){
+    console.log('test1', test);
 });
 
 /**
- * 等本文件定义的 uitl1 模块执行完后，调用 callback
+ * 等定义的 uitl1 模块执行完后，调用 callback
  */
 require(['util1'],function(util){
     console.log('util1', util);
-});
-
-/**
- * 等定义的 uitl2 模块执行完后，调用 callback
- */
-require(['util2'],function(util){
-    console.log('util2', util);
 });
 
 /**
