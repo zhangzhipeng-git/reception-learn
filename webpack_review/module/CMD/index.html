@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sea.js</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/seajs/3.0.3/sea.js"></script>
+    <script>
+        /**
+         * 使用 data-main 只支持加载单模块入口，
+         * 使用 use 方法支持加载多模块入口
+         */
+        seajs.use(['./main'], (a) => {
+            console.log('exec entry js', JSON.stringify(a)); // exec entry js {"desc":"entry module","data":{"a":1,"b":2,"C":3}}
+        });
+    </script>
+</body>
+</html>

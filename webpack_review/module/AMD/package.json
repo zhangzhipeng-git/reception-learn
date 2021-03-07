@@ -1,0 +1,15 @@
+{
+  "name": "amd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev webpack",
+    "pro": "cross-env NODE_ENV=pro webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
