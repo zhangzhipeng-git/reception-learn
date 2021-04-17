@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn"></button>
+    <script>
+        requestAnimationFrame(() => console.log('animation'));
+        setTimeout(() => console.log('setTimeout'),  1000 / 5);
+        // var btn = document.getElementById('btn');
+        // btn.addEventListener('click', () => {
+        //     console.log('button click1');
+        //     Promise.resolve().then(() => console.log('microtask'));
+        // });
+        // btn.addEventListener('click', () => {
+        //     console.log('button click2');
+        // })
+        // btn.click();
+        // setTimeout(() => btn.click(), 10);
+    </script>
+</body>
+</html>

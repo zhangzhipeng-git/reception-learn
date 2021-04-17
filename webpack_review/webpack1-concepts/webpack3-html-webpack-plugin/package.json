@@ -1,0 +1,15 @@
+{
+  "name": "multifile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/main.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev webpack",
+    "pro": "cross-env NODE_ENV=pro webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "raw-loader": "^4.0.2"
+  }
+}

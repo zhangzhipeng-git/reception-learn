@@ -3,7 +3,7 @@
 可通过以下述命令安装 yarn
 
 ``` bash
-yarn install -g yarn
+npm install -g yarn
 ```
 
 | Command | Description |

@@ -57,7 +57,7 @@ export function validateProp (
     }
   }
   // check default value
-  // 如果 prop 的值还是没有
+  // 如果 prop 的值没有
   if (value === undefined) {
     // 获取默认值
     value = getPropDefaultValue(vm, prop, key)
